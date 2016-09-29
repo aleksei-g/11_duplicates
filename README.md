@@ -6,5 +6,5 @@
 
 **Пример запуска скрипта:**
 ```
-python duplicates.py -d1 1 -d2 2`
+python duplicates.py -d1 1 -d2 2
 ```
