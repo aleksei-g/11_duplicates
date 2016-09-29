@@ -56,8 +56,8 @@ def print_compare_files(duplicate_files_dict):
 
 
 def createParser():
-    parser = argparse.ArgumentParser(description=
-                                     'Script to search for duplicate files.')
+    parser = argparse.ArgumentParser(description='Script to search \
+                                     for duplicate files.')
     parser.add_argument('-d1', '--dir1', required=True, metavar='DIRECTORY 1',
                         help='Enter path to directory 1.')
     parser.add_argument('-d2', '--dir2', required=True, metavar='DIRECTORY 2',
