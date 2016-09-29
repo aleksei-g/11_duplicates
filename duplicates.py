@@ -1,20 +1,18 @@
 import os
+import argparse
 
 
-def enter_directory():
-    list_file_path = []
-    for num in range(1, 3):
-        while True:
-            enter_file_path = input('Enter directory %s to scan: ' % num)
-            if os.path.exists(enter_file_path):
-                if os.path.isdir(enter_file_path):
-                    list_file_path.append(os.path.abspath(enter_file_path))
-                    break
-                else:
-                    print('This is not directory!')
+def validate_enter_dir(dir1, dir2):
+    list_valid_dir = []
+    for num, valid_dir in enumerate((dir1, dir2), start=1):
+        if os.path.exists(valid_dir):
+            if os.path.isdir(valid_dir):
+                list_valid_dir.append(os.path.abspath(valid_dir))
             else:
-                print('Directory not found!')
-    return list_file_path
+                print('Enter path %s is not directory!' % num)
+        else:
+            print('Directory %s not found!' % num)
+    return list_valid_dir
 
 
 def get_full_file_name(file_path):
@@ -57,8 +55,21 @@ def print_compare_files(duplicate_files_dict):
         print('Duplicate files not found.')
 
 
+def createParser():
+    parser = argparse.ArgumentParser(description=
+                                     'Script to search for duplicate files.')
+    parser.add_argument('-d1', '--dir1', required=True, metavar='DIRECTORY 1',
+                        help='Enter path to directory 1.')
+    parser.add_argument('-d2', '--dir2', required=True, metavar='DIRECTORY 2',
+                        help='Enter path to directory 2.')
+    return parser
+
+
 if __name__ == '__main__':
-    list_file_path = enter_directory()
-    duplicate_files_dict = are_files_duplicates(list_file_path[0],
-                                                list_file_path[1])
-    print_compare_files(duplicate_files_dict)
+    parser = createParser()
+    namespace = parser.parse_args()
+    list_valid_dir = validate_enter_dir(namespace.dir1, namespace.dir2)
+    if len(list_valid_dir) == 2:
+        duplicate_files_dict = are_files_duplicates(list_valid_dir[0],
+                                                    list_valid_dir[1])
+        print_compare_files(duplicate_files_dict)
