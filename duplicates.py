@@ -2,17 +2,14 @@ import os
 import argparse
 
 
-def validate_dir(dir1, dir2):
-    validate_dir_ok = True
-    for validation_dir in dir1, dir2:
-        if not os.path.exists(validation_dir):
-            print('Directory \"%s\" not found!' % validation_dir)
-            validate_dir_ok = False
-        else:
-            if not os.path.isdir(validation_dir):
-                print('Enter path \"%s\" is not directory!' % validation_dir)
-                validate_dir_ok = False
-    return validate_dir_ok
+def validate_dir(directory):
+    message = None
+    if not os.path.exists(directory):
+        message = 'Directory \"%s\" not found!' % directory
+    else:
+        if not os.path.isdir(directory):
+            message = 'Enter path \"%s\" is not directory!' % directory
+    return message
 
 
 def get_list_file_names(directory):
@@ -70,7 +67,13 @@ def createParser():
 if __name__ == '__main__':
     parser = createParser()
     namespace = parser.parse_args()
-    if validate_dir(namespace.dir1, namespace.dir2):
+    dirs_validation_fail = False
+    for directory in namespace.dir1, namespace.dir2:
+        message = validate_dir(directory)
+        if message:
+            dirs_validation_fail = True
+            print(message)
+    if not dirs_validation_fail:
         print_duplicate_files(
             search_duplicate_files(os.path.abspath(namespace.dir1),
                                    os.path.abspath(namespace.dir2)))
